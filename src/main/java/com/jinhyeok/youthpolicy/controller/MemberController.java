@@ -1,14 +1,14 @@
 package com.jinhyeok.youthpolicy.controller;
 
-import com.jinhyeok.youthpolicy.domain.Member;
+import com.jinhyeok.youthpolicy.dto.member.MemberCreateRequest;
+import com.jinhyeok.youthpolicy.dto.member.MemberResponse;
 import com.jinhyeok.youthpolicy.service.MemberService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/members")
 public class MemberController {
 
     private final MemberService memberService;
@@ -17,18 +17,13 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-
-    @GetMapping("/members/new")
-    public String createMember(@RequestParam("name") String name) {
-        Member member = new Member();
-        member.setName(name);
-
-        memberService.join(member);
-        return "ok";
+    @PostMapping
+    public MemberResponse createMember(@RequestBody MemberCreateRequest request) {
+        return memberService.join(request);
     }
 
-    @GetMapping("/members")
-    public List<Member> members() {
+    @GetMapping
+    public List<MemberResponse> members() {
         return memberService.findMembers();
     }
 }
